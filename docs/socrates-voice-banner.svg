@@ -1,0 +1,281 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 480" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap');
+      
+      .display-title {
+        font-family: 'Cormorant Garamond', Garamond, Georgia, serif;
+        font-size: 30px;
+        font-weight: 700;
+        fill: #141413;
+        letter-spacing: -0.5px;
+      }
+      .display-subtitle {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        fill: #6c6a64;
+      }
+      .card-header {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        fill: #ffffff;
+      }
+      .card-header-dark {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        fill: #141413;
+      }
+      .section-label {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .step-title {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+      .step-action {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        fill: #e8e2d5;
+      }
+      .body-text {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 11px;
+        font-weight: 400;
+        fill: #5a5852;
+      }
+      .body-text-dark {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 11px;
+        font-weight: 400;
+        fill: #b5b0a5;
+      }
+      .quote-text {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 12px;
+        font-style: italic;
+        font-weight: 400;
+        fill: #5a5852;
+      }
+      .badge-text {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+      }
+    </style>
+
+    <!-- Canvas Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf9f5"/>
+      <stop offset="100%" stop-color="#f4efe6"/>
+    </linearGradient>
+
+    <!-- Card Background Gradients -->
+    <linearGradient id="cardCream" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f7f3eb"/>
+    </linearGradient>
+
+    <linearGradient id="cardDark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#242220"/>
+      <stop offset="100%" stop-color="#171614"/>
+    </linearGradient>
+
+    <linearGradient id="coralHeader" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97d60"/>
+      <stop offset="100%" stop-color="#cc785c"/>
+    </linearGradient>
+
+    <!-- Arrow Markers -->
+    <marker id="arrowCoral" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#cc785c" />
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#8e8b82" />
+    </marker>
+
+    <!-- Soft Drop Shadows -->
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#141413" flood-opacity="0.06"/>
+    </filter>
+    
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#141413" flood-opacity="0.04"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Canvas Border -->
+  <rect width="1020" height="480" rx="16" fill="url(#bgGrad)" stroke="#e3dcd1" stroke-width="1.5"/>
+
+  <!-- Subtle Dots Texture Overlay -->
+  <g opacity="0.07">
+    <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="1.5" fill="#141413"/>
+    </pattern>
+    <rect width="1020" height="480" fill="url(#dots)"/>
+  </g>
+
+  <!-- HEADER TITLE BLOCK -->
+  <g transform="translate(48, 48)">
+    <text class="display-title">Socrates Voice Architecture</text>
+    <text class="display-subtitle" y="28">End-to-End Cognitive Behavioral Therapy (CBT) Voice Processing Pipeline</text>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- COLUMN 1: USER VOICE INPUT (LEFT) -->
+  <!-- ========================================== -->
+  <g transform="translate(48, 105)" filter="url(#softShadow)">
+    <rect width="210" height="325" rx="14" fill="url(#cardCream)" stroke="#e3dcd1" stroke-width="1.5"/>
+    
+    <!-- Top Accent Bar -->
+    <path d="M 0 14 A 14 14 0 0 1 14 0 L 196 0 A 14 14 0 0 1 210 14 L 210 44 L 0 44 Z" fill="url(#coralHeader)"/>
+    <text class="card-header" x="105" y="27" text-anchor="middle">User Voice Input</text>
+
+    <!-- Mic Graphic Container -->
+    <circle cx="105" cy="95" r="28" fill="#f4efe6" stroke="#e3dcd1" stroke-width="1.5"/>
+    <g transform="translate(105, 95)" fill="none" stroke="#cc785c" stroke-width="2" stroke-linecap="round">
+      <rect x="-6" y="-11" width="12" height="16" rx="6" fill="#cc785c"/>
+      <path d="M -10 -2 A 10 10 0 0 0 10 -2"/>
+      <line x1="0" y1="8" x2="0" y2="14"/>
+      <line x1="-5" y1="14" x2="5" y2="14"/>
+    </g>
+
+    <!-- Waveform Visualizer -->
+    <g transform="translate(32, 145)" fill="#cc785c">
+      <rect x="0" y="12" width="4" height="12" rx="2" opacity="0.6"/>
+      <rect x="10" y="4" width="4" height="28" rx="2"/>
+      <rect x="20" y="0" width="4" height="36" rx="2"/>
+      <rect x="30" y="8" width="4" height="20" rx="2"/>
+      <rect x="40" y="2" width="4" height="32" rx="2"/>
+      <rect x="50" y="14" width="4" height="8" rx="2" opacity="0.5"/>
+      <rect x="60" y="6" width="4" height="24" rx="2"/>
+      <rect x="70" y="0" width="4" height="36" rx="2"/>
+      <rect x="80" y="4" width="4" height="28" rx="2"/>
+      <rect x="90" y="8" width="4" height="20" rx="2"/>
+      <rect x="100" y="2" width="4" height="32" rx="2"/>
+      <rect x="110" y="6" width="4" height="24" rx="2"/>
+      <rect x="120" y="12" width="4" height="12" rx="2" opacity="0.6"/>
+      <rect x="130" y="14" width="4" height="8" rx="2" opacity="0.4"/>
+      <rect x="140" y="10" width="4" height="16" rx="2" opacity="0.5"/>
+    </g>
+
+    <!-- Quote Box -->
+    <rect x="18" y="200" width="174" height="105" rx="10" fill="#faf9f5" stroke="#e3dcd1" stroke-width="1"/>
+    <text class="quote-text" x="28" y="226">"Saya merasa tidak</text>
+    <text class="quote-text" x="28" y="248">bisa menyelesaikan</text>
+    <text class="quote-text" x="28" y="270" font-weight="600" fill="#cc785c">tugas ini dengan baik..."</text>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- CONNECTING ARROW: COLUMN 1 -> COLUMN 2 -->
+  <!-- ========================================== -->
+  <line x1="258" y1="267" x2="279" y2="267" stroke="#cc785c" stroke-width="2.5" marker-end="url(#arrowCoral)"/>
+
+  <!-- ========================================== -->
+  <!-- COLUMN 2: SOCRATES CORE ENGINE (CENTER) -->
+  <!-- ========================================== -->
+  <g transform="translate(285, 105)" filter="url(#softShadow)">
+    <rect width="440" height="325" rx="14" fill="url(#cardDark)" stroke="#383532" stroke-width="1.5"/>
+
+    <!-- Section 1: AssemblyAI Voice Agent -->
+    <g transform="translate(18, 18)">
+      <rect width="404" height="66" rx="10" fill="#2d2a27" stroke="#423e3a" stroke-width="1"/>
+      <text class="section-label" x="18" y="27" fill="#4ea392">AssemblyAI Voice Agent</text>
+      <text class="body-text-dark" x="18" y="48">Realtime STT (universal-3.5)  •  Neural Turn Detection  •  Barge-In</text>
+    </g>
+
+    <!-- Section 2: 3-Step CBT Restructuring Engine -->
+    <g transform="translate(18, 100)">
+      <text class="section-label" x="0" y="0" fill="#e8e2d5">CBT Cognitive Restructuring Engine</text>
+      
+      <!-- Card 1: Catch -->
+      <g transform="translate(0, 14)">
+        <rect width="128" height="128" rx="8" fill="#242220" stroke="#d97d60" stroke-width="1.5"/>
+        <text class="step-title" x="64" y="26" fill="#d97d60" text-anchor="middle">1. CATCH</text>
+        <line x1="12" y1="38" x2="116" y2="38" stroke="#383532"/>
+        <text class="step-action" x="64" y="58" text-anchor="middle">Identify ANTs</text>
+        <text class="body-text-dark" x="64" y="78" text-anchor="middle">Automatic Negative</text>
+        <text class="body-text-dark" x="64" y="94" text-anchor="middle">Thoughts</text>
+      </g>
+
+      <!-- Card 2: Challenge -->
+      <g transform="translate(138, 14)">
+        <rect width="128" height="128" rx="8" fill="#242220" stroke="#e8a55a" stroke-width="1.5"/>
+        <text class="step-title" x="64" y="26" fill="#e8a55a" text-anchor="middle">2. CHALLENGE</text>
+        <line x1="12" y1="38" x2="116" y2="38" stroke="#383532"/>
+        <text class="step-action" x="64" y="58" text-anchor="middle">Reframing</text>
+        <text class="body-text-dark" x="64" y="78" text-anchor="middle">Socratic Questions</text>
+        <text class="body-text-dark" x="64" y="94" text-anchor="middle">&amp; Evidence Test</text>
+      </g>
+
+      <!-- Card 3: Replace -->
+      <g transform="translate(276, 14)">
+        <rect width="128" height="128" rx="8" fill="#242220" stroke="#4ea392" stroke-width="1.5"/>
+        <text class="step-title" x="64" y="26" fill="#4ea392" text-anchor="middle">3. REPLACE</text>
+        <line x1="12" y1="38" x2="116" y2="38" stroke="#383532"/>
+        <text class="step-action" x="64" y="58" text-anchor="middle">Rational Thought</text>
+        <text class="body-text-dark" x="64" y="78" text-anchor="middle">Balanced &amp; Objective</text>
+        <text class="body-text-dark" x="64" y="94" text-anchor="middle">Alternative</text>
+      </g>
+    </g>
+
+    <!-- Section 3: MIND-SAFE Crisis Safety Layer -->
+    <g transform="translate(18, 260)">
+      <rect width="404" height="46" rx="8" fill="#1b2e25" stroke="#2e5c46" stroke-width="1"/>
+      <circle cx="24" cy="23" r="5" fill="#4ea392"/>
+      <text class="section-label" x="38" y="27" fill="#75d1b9">MIND-SAFE Crisis Monitor</text>
+      <text class="body-text-dark" x="386" y="27" fill="#a3e0cf" text-anchor="end">Continuous Safety Audit</text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- CONNECTING ARROWS: COLUMN 2 -> COLUMN 3 -->
+  <!-- ========================================== -->
+  <path d="M 725 152 L 749 152" stroke="#e8a55a" stroke-width="2" marker-end="url(#arrowCoral)"/>
+  <path d="M 725 267 L 749 267" stroke="#cc785c" stroke-width="2" marker-end="url(#arrowCoral)"/>
+  <path d="M 725 390 L 749 390" stroke="#8e8b82" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrowGray)"/>
+
+  <!-- ========================================== -->
+  <!-- COLUMN 3: INTELLIGENCE & OUTPUTS (RIGHT) -->
+  <!-- ========================================== -->
+  <g transform="translate(755, 105)">
+    <!-- Card 1: Google Gemini LLM -->
+    <g filter="url(#cardShadow)">
+      <rect width="218" height="95" rx="12" fill="url(#cardCream)" stroke="#e3dcd1" stroke-width="1.5"/>
+      <rect width="218" height="32" rx="12" fill="#f0ece1"/>
+      <rect y="18" width="218" height="14" fill="#f0ece1"/>
+      <text class="card-header-dark" x="18" y="21">Google Gemini API</text>
+      <text class="body-text" x="18" y="48">• Cognitive Reasoning LLM</text>
+      <text class="body-text" x="18" y="65">• Socratic Dialogue Generation</text>
+      <text class="badge-text" x="18" y="82" fill="#cc785c">gemma-4-26b / gemini-2.5</text>
+    </g>
+
+    <!-- Card 2: Clinical Artifacts -->
+    <g transform="translate(0, 110)" filter="url(#cardShadow)">
+      <rect width="218" height="130" rx="12" fill="url(#cardCream)" stroke="#e3dcd1" stroke-width="1.5"/>
+      <rect width="218" height="32" rx="12" fill="url(#coralHeader)"/>
+      <rect y="18" width="218" height="14" fill="url(#coralHeader)"/>
+      <text class="card-header" x="109" y="21" text-anchor="middle">Clinical Session Artifacts</text>
+      
+      <text class="body-text" x="18" y="48">• Audio Session Recording (OGG)</text>
+      <text class="body-text" x="18" y="66">• Real-Time Transcript Timeline</text>
+      <text class="body-text" x="18" y="84">• CBT Summary for Therapist</text>
+      <text class="body-text" x="18" y="102">• Safety Audit Log</text>
+    </g>
+
+    <!-- Card 3: PostgreSQL Database -->
+    <g transform="translate(0, 255)" filter="url(#cardShadow)">
+      <rect width="218" height="70" rx="10" fill="#242220" stroke="#383532" stroke-width="1.5"/>
+      <text class="section-label" x="109" y="28" fill="#e8e2d5" text-anchor="middle">PostgreSQL 16</text>
+      <text class="body-text-dark" x="109" y="48" text-anchor="middle">Drizzle ORM Session Persistence</text>
+    </g>
+  </g>
+
+</svg>
