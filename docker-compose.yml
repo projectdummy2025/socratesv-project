@@ -17,13 +17,13 @@ services:
     container_name: socrates_postgres
     image: postgres:16-alpine
     ports:
-      - "5432:5432"
+      - "5435:5432"
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-socrates_user}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-socrates_secure_password}
       - POSTGRES_DB=${POSTGRES_DB:-socrates_db}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data:Z
     restart: unless-stopped
 
 volumes:
