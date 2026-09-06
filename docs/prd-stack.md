@@ -78,10 +78,11 @@ interface CBTStep {
 - Audio download: S3 presigned URL (no auth header)
 
 ### 4.2 AssemblyAI Realtime STT
-- Token: `POST https://api.assemblyai.com/v2/token` body `{ "ttl": 3600 }`
-- WebSocket: `wss://api.assemblyai.com/v2/realtime/ws?token=<token>`
-- Connect message: `{ "type": "connect", "connection_id": "<uuid>", "encoding": "pcm_s16le", "sample_rate": 16000 }`
-- Model: `universal-3-5-pro`
+- Token: `GET https://streaming.assemblyai.com/v3/token?expires_in_seconds=300`
+- Header: `Authorization: <ASSEMBLYAI_API_KEY>`
+- WebSocket: `wss://streaming.assemblyai.com/v3/ws?token=<token>&sample_rate=16000&encoding=pcm_s16le`
+- Audio Format: Raw PCM 16-bit 16kHz Little-Endian Int16 via Web Audio API (`AudioContext`)
+- Model: `universal-3-5-pro` (English `en-US`) / Web Speech API (`id-ID` for Indonesian)
 
 ### 4.3 Gemini API
 - Client: `@google/genai` or REST `https://generativelanguage.googleapis.com/v1beta/models/gemma-4-26b-a4b-it:generateContent`
@@ -158,7 +159,7 @@ From project `AGENTS.md`:
 
 ## 8. Alignment with Basis Topik
 
-Dokumen ini disusun agar AI CLI bisa mengeksekusi [basis-topik.md](file:///home/ahmad/projects/socrates-voice/docs/basis-topik.md).
+Dokumen ini disusun agar AI CLI bisa mengeksekusi [basis-topik.md](file:///home/ahmad/projects/socrates-voice/docs/basis-topik.md)
 
 ### 8.1 CBT 3 Langkah → Data Models & Flows
 - **Catch** → `TranscriptTurn` untuk merekam pikiran otomatis negatif
