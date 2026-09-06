@@ -1,65 +1,43 @@
-import Fastify from "fastify";
-import cors from "@fastify/cors";
+import path from 'path';
+import dotenv from 'dotenv';
+import Fastify from 'fastify';
+import cors from '@fastify/cors';
+import { runDrizzleColdstartMigration } from './db/index.js';
+import { sessionRoutes } from './routes/sessionRoutes.js';
+import { crisisRoutes } from './routes/crisisRoutes.js';
+import { cbtRoutes } from './routes/cbtRoutes.js';
 
-// Initialize Fastify server instance
-const server = Fastify({ logger: false });
+// Automatically load environment variables from root .env or backend .env
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
-// Register CORS middleware for cross-origin requests
-await server.register(cors, { origin: true });
-
-// Helper function to format logs according to AGENTS.md: (YYYY-MM-DD HH:mm:ss) functionality message
-function logMessage(messageText: string): void {
-  const currentTimestamp = new Date().toISOString().replace("T", " ").substring(0, 19);
-  console.log(`(${currentTimestamp}) ${messageText}`);
-}
-
-// Interfaces for response data validation
-interface HealthStatus {
-  serviceStatus: string;
-  serviceName: string;
-}
-
-interface SessionData {
-  sessionId: string;
-  agentId: string;
-  sessionStatus: string;
-}
-
-// Health check endpoint for system readiness verification
-server.get("/health", async (): Promise<HealthStatus> => {
-  // Log request execution
-  logMessage("Backend health check requested");
-
-  return {
-    serviceStatus: "ok",
-    serviceName: "socrates-backend"
-  };
+const server = Fastify({
+  logger: false,
 });
 
-// Create new AssemblyAI session endpoint
-server.post("/api/session/create", async (request, reply): Promise<SessionData> => {
-  // Log session creation process
-  logMessage("Creating new AssemblyAI session");
-
-  // Generate unique session identifier
-  const generatedId = `session-${Date.now()}`;
-
-  // Return formatted session metadata
-  return reply.code(200).send({
-    sessionId: generatedId,
-    agentId: "agent-socrates-demo",
-    sessionStatus: "active"
-  });
+// Register CORS middleware
+await server.register(cors, {
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 });
 
-// Extract port configuration from environment or default to 3455
-const serverPort = Number(process.env.PORT_BACKEND) || 3455;
+// Register API Routes
+await server.register(sessionRoutes);
+await server.register(crisisRoutes);
+await server.register(cbtRoutes);
 
-// Start listening for incoming connections
+// Health check endpoint
+server.get('/health', async () => {
+  return { status: 'ok', timestamp: new Date().toISOString() };
+});
+
+// Start server listening on configured port after executing automatic Drizzle coldstart migration
+const serverPort = Number(process.env.PORT_BACKEND || 3455);
 try {
-  await server.listen({ port: serverPort, host: "0.0.0.0" });
-  logMessage(`Backend server running on port ${serverPort}`);
-} catch (serverError) {
-  logMessage(`Failed starting backend server: ${serverError}`);
+  await runDrizzleColdstartMigration();
+  await server.listen({ port: serverPort, host: '0.0.0.0' });
+  console.log(`Backend server running on port ${serverPort}`);
+} catch (err) {
+  console.error('Failed starting backend server:', err);
   process.exit(1);
 }
