@@ -15,11 +15,15 @@ export interface CbtAnalysisResponseData {
   replacementThought: string;
 }
 
-// Request backend to create AssemblyAI Voice Agent session
-export async function requestNewSession(): Promise<SessionResponseData> {
+// Request backend to create AssemblyAI Voice Agent session (guest mode)
+export async function requestNewSession(userId?: string, userName?: string): Promise<SessionResponseData> {
   const backendUrl = import.meta.env.VITE_BACKEND_SERVICE_URL || import.meta.env.BACKEND_SERVICE_URL || 'http://localhost:3455';
   try {
-    const apiResponse = await fetch(`${backendUrl}/api/session/create`, { method: 'POST' });
+    const apiResponse = await fetch(`${backendUrl}/api/session/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, userName })
+    });
     if (apiResponse.ok) {
       return await apiResponse.json() as SessionResponseData;
     }

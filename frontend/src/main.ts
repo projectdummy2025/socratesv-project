@@ -8,7 +8,7 @@ import { ParticlesCanvas } from './components/ParticlesCanvas.js';
 import { WaveformVisualizer } from './components/WaveformVisualizer.js';
 import { requestNewSession, requestCrisisCheck, requestCbtAnalysis } from './services/apiService.js';
 import { AudioStreamManager } from './services/audioStreamService.js';
-import { handleOAuthCallback } from './services/authService.js';
+import { getActiveUser, logout as doLogout } from './services/authService.js';
 
 // Application State
 const appElement = document.querySelector<HTMLDivElement>('#app')!;
@@ -18,22 +18,6 @@ let cbtStepState: 'catch' | 'challenge' | 'replace' = 'catch';
 const audioManager = new AudioStreamManager();
 let waveformVis: WaveformVisualizer | null = null;
 let particlesInst: ParticlesCanvas | null = null;
-
-// Read active user session from localStorage or parse OAuth return callback token
-function getActiveUser(): { userId: string; userEmail: string } | null {
-  // Check if returning from Supabase OAuth redirect URL
-  const oauthSession = handleOAuthCallback();
-  if (oauthSession) {
-    return { userId: oauthSession.userId, userEmail: oauthSession.userEmail };
-  }
-
-  const userId = localStorage.getItem('socrates_user_id');
-  const userEmail = localStorage.getItem('socrates_user_email');
-  if (userId && userEmail) {
-    return { userId, userEmail };
-  }
-  return null;
-}
 
 // Update Guidance Card Banner with Generous Spacing and Warm Empathetic Copy
 function updateGuidanceCard(step: 'catch' | 'challenge' | 'replace'): void {
@@ -182,9 +166,7 @@ function bindMainEvents(): void {
 
   if (dockLogoutBtn) {
     dockLogoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('socrates_user_id');
-      localStorage.removeItem('socrates_user_email');
-      localStorage.removeItem('socrates_access_token');
+      doLogout();
       audioManager.stopStreaming();
       if (waveformVis) waveformVis.stopAnimating();
       isRecordingActive = false;
@@ -217,7 +199,8 @@ function bindMainEvents(): void {
         if (waveformVis) waveformVis.startAnimating(false);
         statusHint.textContent = 'Mendengarkan... Bicara pikiran Anda.';
 
-        const sessionData = await requestNewSession();
+        const activeUser = getActiveUser();
+        const sessionData = await requestNewSession(activeUser?.userId, activeUser?.userEmail?.split('@')[0]);
         if (!isRecordingActive) {
           audioManager.stopStreaming();
           if (dockNav) dockNav.classList.remove('hidden');

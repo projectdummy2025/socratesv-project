@@ -1,65 +1,34 @@
-// Frontend Supabase OAuth Helper & Token Callback Parser
-
-interface OAuthOptions {
-  provider: 'google' | 'github';
-  redirectTo?: string;
-}
+// Simplified auth service - guest only, no OAuth
 
 export interface AuthSession {
   userId: string;
   userEmail: string;
-  accessToken?: string;
 }
 
-// Check if URL contains Supabase OAuth callback tokens (#access_token=... or ?code=...)
-export function handleOAuthCallback(): AuthSession | null {
-  const hash = window.location.hash;
+// Guest login - creates simple local session
+export function guestLogin(userName?: string): AuthSession {
+  const userId = `guest-${Date.now()}`;
+  const userEmail = userName || 'guest@socrates.app';
 
-  if (hash && hash.includes('access_token=')) {
-    const params = new URLSearchParams(hash.substring(1));
-    const accessToken = params.get('access_token');
-    
-    if (accessToken) {
-      try {
-        // Decode JWT payload (middle part of token)
-        const payloadBase64 = accessToken.split('.')[1];
-        const payloadJson = JSON.parse(atob(payloadBase64));
-        
-        const userId = payloadJson.sub || `user-${Date.now()}`;
-        const userEmail = payloadJson.email || 'user@supabase.io';
+  localStorage.setItem('socrates_user_id', userId);
+  localStorage.setItem('socrates_user_email', userEmail);
 
-        localStorage.setItem('socrates_user_id', userId);
-        localStorage.setItem('socrates_user_email', userEmail);
-        localStorage.setItem('socrates_access_token', accessToken);
+  return { userId, userEmail };
+}
 
-        // Clean URL hash
-        window.history.replaceState(null, '', window.location.pathname);
+// Get current active user from localStorage
+export function getActiveUser(): AuthSession | null {
+  const userId = localStorage.getItem('socrates_user_id');
+  const userEmail = localStorage.getItem('socrates_user_email');
 
-        return { userId, userEmail, accessToken };
-      } catch (err) {
-        console.warn('Failed to parse OAuth JWT token:', err);
-      }
-    }
+  if (userId && userEmail) {
+    return { userId, userEmail };
   }
-
   return null;
 }
 
-// Trigger Supabase OAuth sign-in redirect matching root .env SUPABASE_URL
-export function redirectToOAuthProvider(options: OAuthOptions): { success: boolean; error?: string } {
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL;
-
-  if (!supabaseUrl || supabaseUrl.includes('your-supabase-project')) {
-    return {
-      success: false,
-      error: 'SUPABASE_URL belum dikonfigurasi di file .env root.'
-    };
-  }
-
-  const redirectTarget = options.redirectTo || window.location.origin;
-  const oauthRedirectUrl = `${supabaseUrl}/auth/v1/authorize?provider=${options.provider}&redirect_to=${encodeURIComponent(redirectTarget)}`;
-
-  // Execute browser redirect to real Supabase OAuth provider endpoint
-  window.location.href = oauthRedirectUrl;
-  return { success: true };
+// Logout - clear stored session
+export function logout(): void {
+  localStorage.removeItem('socrates_user_id');
+  localStorage.removeItem('socrates_user_email');
 }

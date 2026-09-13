@@ -1,6 +1,5 @@
 import { FastifyInstance } from 'fastify';
 import { createAssemblySession } from '../services/assemblyService.js';
-import { verifySupabaseToken } from '../services/authService.js';
 import { databaseClient } from '../db/index.js';
 import { sessionsTable, usersTable } from '../db/schema.js';
 
@@ -12,27 +11,24 @@ interface SessionCreateResponse {
   userId?: string;
 }
 
-// Session API routes plugin with Supabase Auth integration
+// Session API routes plugin
 export async function sessionRoutes(fastifyInstance: FastifyInstance): Promise<void> {
   fastifyInstance.post('/api/session/create', async (request, reply): Promise<SessionCreateResponse> => {
     const sessionIdentifier = `sess-${Date.now()}`;
     const defaultAgentIdentifier = 'agent-socrates-voice';
 
-    // Verify Supabase Auth token from Authorization header
-    const authHeader = request.headers.authorization;
-    const authUser = await verifySupabaseToken(authHeader);
-    const authenticatedUserId = authUser?.userId || null;
+    // Guest user record (nama tampilan opsional dari body, tanpa verifikasi token)
+    const requestBody = request.body as { userId?: string; userName?: string } | undefined;
+    const guestUserId = requestBody?.userId || `guest-${Date.now()}`;
+    const guestUserName = requestBody?.userName?.trim() || 'Tamu';
 
-    // Ensure user record exists if authenticated
-    if (authUser) {
-      try {
-        await databaseClient.insert(usersTable).values({
-          id: authUser.userId,
-          userEmail: authUser.userEmail
-        }).onConflictDoNothing();
-      } catch (userDbErr) {
-        console.log(`(SessionRoutes) User insertion warning: ${userDbErr}`);
-      }
+    try {
+      await databaseClient.insert(usersTable).values({
+        id: guestUserId,
+        userEmail: `${guestUserName}@guest.socrates`
+      }).onConflictDoNothing();
+    } catch (userDbErr) {
+      console.log(`(SessionRoutes) User insertion warning: ${userDbErr}`);
     }
 
     const { websocketEndpoint } = await createAssemblySession(sessionIdentifier);
@@ -40,7 +36,7 @@ export async function sessionRoutes(fastifyInstance: FastifyInstance): Promise<v
     try {
       await databaseClient.insert(sessionsTable).values({
         id: sessionIdentifier,
-        userId: authenticatedUserId,
+        userId: guestUserId,
         agentId: defaultAgentIdentifier,
         sessionStatus: 'active'
       });
@@ -53,7 +49,7 @@ export async function sessionRoutes(fastifyInstance: FastifyInstance): Promise<v
       agentId: defaultAgentIdentifier,
       websocketUrl: websocketEndpoint,
       sessionStatus: 'active',
-      userId: authenticatedUserId || undefined
+      userId: guestUserId
     });
   });
 }
