@@ -26,8 +26,8 @@ Socrates-Voice is a CBT-based voice therapy assistant. It guides users through 3
   - Frontend: Vite (Static host / Vercel / Cloudflare Pages)
   - Node Backend: Fastify (Render / Railway / VPS)
   - Python Microservice: FastAPI / Flask (Render / Railway / Docker Container)
-- Database: PostgreSQL (via Supabase or Neon)
-- Auth: Supabase Auth / custom JWT
+- Database: PostgreSQL (Local / Docker)
+- Auth: Simplified guest auth / local session
 - Storage: S3-compatible for session recordings
 
 ## 3. Data Models
