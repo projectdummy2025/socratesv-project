@@ -15,9 +15,16 @@ export interface CbtAnalysisResponseData {
   replacementThought: string;
 }
 
+function getBackendUrl(): string {
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return ''; // Use relative path proxied by Vite for remote/tunnel access
+  }
+  return import.meta.env.VITE_BACKEND_SERVICE_URL || 'http://localhost:3455';
+}
+
 // Request backend to create AssemblyAI Voice Agent session (guest mode)
 export async function requestNewSession(userId?: string, userName?: string): Promise<SessionResponseData> {
-  const backendUrl = import.meta.env.VITE_BACKEND_SERVICE_URL || import.meta.env.BACKEND_SERVICE_URL || 'http://localhost:3455';
+  const backendUrl = getBackendUrl();
   try {
     const apiResponse = await fetch(`${backendUrl}/api/session/create`, {
       method: 'POST',
@@ -39,7 +46,7 @@ export async function requestNewSession(userId?: string, userName?: string): Pro
 
 // Request backend crisis intent check
 export async function requestCrisisCheck(sessionId: string, userTranscript: string): Promise<CrisisResponseData> {
-  const backendUrl = import.meta.env.VITE_BACKEND_SERVICE_URL || import.meta.env.BACKEND_SERVICE_URL || 'http://localhost:3455';
+  const backendUrl = getBackendUrl();
   try {
     const apiResponse = await fetch(`${backendUrl}/api/crisis/detect`, {
       method: 'POST',
@@ -57,7 +64,7 @@ export async function requestCrisisCheck(sessionId: string, userTranscript: stri
 
 // Request Gemini CBT Socratic analysis from backend
 export async function requestCbtAnalysis(userThought: string): Promise<CbtAnalysisResponseData> {
-  const backendUrl = import.meta.env.VITE_BACKEND_SERVICE_URL || import.meta.env.BACKEND_SERVICE_URL || 'http://localhost:3455';
+  const backendUrl = getBackendUrl();
   try {
     const apiResponse = await fetch(`${backendUrl}/api/cbt/analyze`, {
       method: 'POST',
