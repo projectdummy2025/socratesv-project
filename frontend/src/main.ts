@@ -180,111 +180,126 @@ function bindMainEvents(): void {
     });
   }
 
+  function stopRecordingSession(): void {
+    isRecordingActive = false;
+    audioManager.stopStreaming();
+    if (waveformVis) waveformVis.stopAnimating();
+    if (pulseRing) pulseRing.classList.add('hidden');
+    if (dockNav) dockNav.classList.remove('hidden');
+    if (controlsFooter) {
+      controlsFooter.classList.remove('bottom-0');
+      controlsFooter.classList.add('bottom-24');
+    }
+    if (micBtn && micLabel) {
+      micBtn.className = 'w-16 h-16 rounded-full bg-[#cc785c] hover:bg-[#a9583e] text-white font-bold flex items-center justify-center shadow-lg shadow-[#cc785c]/30 active:scale-95 transition-all';
+      micLabel.textContent = 'START';
+    }
+    if (statusHint) {
+      statusHint.textContent = 'Tekan tombol di atas untuk mulai bicara';
+    }
+  }
+
   if (micBtn && micLabel && messagesList && statusHint) {
-    micBtn.addEventListener('click', async () => {
+    micBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      if (isRecordingActive) {
+        // Stop recording synchronously and immediately reset UI to START
+        stopRecordingSession();
+        return;
+      }
+
+      // Start recording
+      isRecordingActive = true;
+      
+      // Auto-hide Guidance Card & Dock Nav, smoothly float controls footer down to bottom-0
+      if (stepBanner) stepBanner.classList.add('hidden');
+      if (dockNav) dockNav.classList.add('hidden');
+      if (controlsFooter) {
+        controlsFooter.classList.remove('bottom-24');
+        controlsFooter.classList.add('bottom-0');
+      }
+
+      micBtn.className = 'w-16 h-16 rounded-full bg-rose-600 hover:bg-rose-500 text-white font-bold flex items-center justify-center shadow-lg shadow-rose-600/30 active:scale-95 transition-all';
+      micLabel.textContent = 'STOP';
+      if (pulseRing) pulseRing.classList.remove('hidden');
+      if (waveformVis) waveformVis.startAnimating(false);
+      statusHint.textContent = 'Mendengarkan... Bicara pikiran Anda.';
+
+      const activeUser = getActiveUser();
+      const sessionData = await requestNewSession(activeUser?.userId, activeUser?.userEmail?.split('@')[0]);
+      
       if (!isRecordingActive) {
-        isRecordingActive = true;
-        
-        // Auto-hide Guidance Card & Dock Nav, smoothly float controls footer down to bottom-0
-        if (stepBanner) stepBanner.classList.add('hidden');
-        if (dockNav) dockNav.classList.add('hidden');
-        if (controlsFooter) {
-          controlsFooter.classList.remove('bottom-24');
-          controlsFooter.classList.add('bottom-0');
-        }
+        stopRecordingSession();
+        return;
+      }
 
-        micBtn.className = 'w-16 h-16 rounded-full bg-rose-600 hover:bg-rose-500 text-white font-bold flex items-center justify-center shadow-lg shadow-rose-600/30 active:scale-95 transition-all';
-        micLabel.textContent = 'STOP';
-        if (pulseRing) pulseRing.classList.remove('hidden');
-        if (waveformVis) waveformVis.startAnimating(false);
-        statusHint.textContent = 'Mendengarkan... Bicara pikiran Anda.';
+      currentSessionId = sessionData.sessionId;
 
-        const activeUser = getActiveUser();
-        const sessionData = await requestNewSession(activeUser?.userId, activeUser?.userEmail?.split('@')[0]);
-        if (!isRecordingActive) {
-          audioManager.stopStreaming();
-          if (dockNav) dockNav.classList.remove('hidden');
-          if (controlsFooter) {
-            controlsFooter.classList.remove('bottom-0');
-            controlsFooter.classList.add('bottom-24');
-          }
-          return;
-        }
+      await audioManager.startStreaming(sessionData.websocketUrl, {
+        onTranscript: async (speakerRole, transcriptText) => {
+          if (!isRecordingActive) return;
+          appendChatTurn(messagesList, speakerRole, transcriptText, speakerRole === 'USER');
 
-        currentSessionId = sessionData.sessionId;
+          if (speakerRole === 'USER') {
+            if (waveformVis) waveformVis.startAnimating(false);
+            
+            // Show thinking indicator
+            const thinkingEl = document.createElement('div');
+            thinkingEl.className = 'flex justify-start my-2 text-xs text-[#cc785c] animate-pulse font-medium px-4';
+            thinkingEl.textContent = 'SOCRATES sedang merespons...';
+            messagesList.appendChild(thinkingEl);
+            if (messagesList.parentElement) messagesList.parentElement.scrollTop = messagesList.parentElement.scrollHeight;
 
-        await audioManager.startStreaming(sessionData.websocketUrl, {
-          onTranscript: async (speakerRole, transcriptText) => {
-            appendChatTurn(messagesList, speakerRole, transcriptText, speakerRole === 'USER');
+            // 1. Check Crisis Intent
+            const crisisCheck = await requestCrisisCheck(currentSessionId, transcriptText);
+            if (!isRecordingActive) {
+              if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
+              return;
+            }
 
-            if (speakerRole === 'USER') {
-              if (waveformVis) waveformVis.startAnimating(false);
-              
-              // 1. Check Crisis Intent
-              const crisisCheck = await requestCrisisCheck(currentSessionId, transcriptText);
-              if (crisisCheck.isDangerous && crisisModal) {
-                crisisModal.classList.remove('hidden');
-                audioManager.stopStreaming();
-                if (waveformVis) waveformVis.stopAnimating();
-                if (dockNav) dockNav.classList.remove('hidden');
-                if (controlsFooter) {
-                  controlsFooter.classList.remove('bottom-0');
-                  controlsFooter.classList.add('bottom-24');
-                }
-                return;
-              }
+            if (crisisCheck.isDangerous && crisisModal) {
+              if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
+              crisisModal.classList.remove('hidden');
+              stopRecordingSession();
+              return;
+            }
 
-              // 2. Human Empathetic State Progression
-              if (cbtStepState === 'catch') {
-                cbtStepState = 'challenge';
-                updateGuidanceCard('challenge');
+            // 2. Human Empathetic State Progression
+            if (cbtStepState === 'catch') {
+              cbtStepState = 'challenge';
+              updateGuidanceCard('challenge');
 
-                const cbtResponse = await requestCbtAnalysis(transcriptText);
-                appendChatTurn(messagesList, 'SOCRATES', cbtResponse.challengeQuestion, false);
+              const cbtResponse = await requestCbtAnalysis(transcriptText);
+              if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
+              if (!isRecordingActive) return;
+              appendChatTurn(messagesList, 'SOCRATES', cbtResponse.challengeQuestion, false);
 
-                if (cbtResponse.replacementThought) {
-                  setTimeout(() => {
-                    cbtStepState = 'replace';
-                    updateGuidanceCard('replace');
-                    appendChatTurn(messagesList, 'SOCRATES', cbtResponse.replacementThought, false);
-                  }, 2500);
-                }
-              } else {
-                const cbtResponse = await requestCbtAnalysis(transcriptText);
-                appendChatTurn(messagesList, 'SOCRATES', cbtResponse.challengeQuestion, false);
+              if (cbtResponse.replacementThought) {
+                setTimeout(() => {
+                  if (!isRecordingActive) return;
+                  cbtStepState = 'replace';
+                  updateGuidanceCard('replace');
+                  appendChatTurn(messagesList, 'SOCRATES', cbtResponse.replacementThought, false);
+                }, 2500);
               }
             } else {
-              if (waveformVis) waveformVis.startAnimating(true);
+              const cbtResponse = await requestCbtAnalysis(transcriptText);
+              if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
+              if (!isRecordingActive) return;
+              appendChatTurn(messagesList, 'SOCRATES', cbtResponse.challengeQuestion, false);
             }
-          },
-          onError: (err) => {
-            console.warn('Audio stream error:', err);
+          } else {
+            if (waveformVis) waveformVis.startAnimating(true);
           }
-        });
-
-        if (!isRecordingActive) {
-          audioManager.stopStreaming();
-          if (dockNav) dockNav.classList.remove('hidden');
-          if (controlsFooter) {
-            controlsFooter.classList.remove('bottom-0');
-            controlsFooter.classList.add('bottom-24');
-          }
+        },
+        onError: (err) => {
+          console.warn('Audio stream error:', err);
         }
+      });
 
-      } else {
-        isRecordingActive = false;
-        audioManager.stopStreaming();
-        if (waveformVis) waveformVis.stopAnimating();
-        if (pulseRing) pulseRing.classList.add('hidden');
-        if (dockNav) dockNav.classList.remove('hidden');
-        if (controlsFooter) {
-          controlsFooter.classList.remove('bottom-0');
-          controlsFooter.classList.add('bottom-24');
-        }
-
-        micBtn.className = 'w-16 h-16 rounded-full bg-[#cc785c] hover:bg-[#a9583e] text-white font-bold flex items-center justify-center shadow-lg shadow-[#cc785c]/30 active:scale-95 transition-all';
-        micLabel.textContent = 'START';
-        statusHint.textContent = 'Tekan tombol di atas untuk mulai bicara';
+      if (!isRecordingActive) {
+        stopRecordingSession();
       }
     });
   }
