@@ -147,8 +147,8 @@ export class AudioStreamManager {
         instance.onend = null;
         instance.onresult = null;
         instance.onerror = null;
-        instance.stop();
-        instance.abort();
+        try { instance.stop(); } catch (_) {}
+        try { instance.abort(); } catch (_) {}
       }
     } catch (err) {
       console.warn('(AudioStream) SpeechRecognition stop error:', err);
