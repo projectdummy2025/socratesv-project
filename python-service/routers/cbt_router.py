@@ -5,7 +5,7 @@ from services.cbt_service import process_cbt_thought
 # Initialize CBT API router
 router = APIRouter(prefix="/api/cbt", tags=["cbt"])
 
-# Analyze negative thought endpoint
+# Analyze negative thought endpoint with multi-turn history
 @router.post("/analyze", response_model=ThoughtOutput)
 def analyze_thought_endpoint(inputData: ThoughtInput):
-    return process_cbt_thought(inputData.userThought)
+    return process_cbt_thought(inputData.userThought, inputData.conversationHistory or [])
