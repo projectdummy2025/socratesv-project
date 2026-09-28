@@ -6,7 +6,7 @@ import { getDockBarHTML } from './components/DockBar.js';
 import { appendChatTurn } from './components/ChatTimeline.js';
 import { ParticlesCanvas } from './components/ParticlesCanvas.js';
 import { WaveformVisualizer } from './components/WaveformVisualizer.js';
-import { requestNewSession, requestCrisisCheck, requestCbtAnalysis } from './services/apiService.js';
+import { ChatMessage, requestNewSession, requestCrisisCheck, requestCbtAnalysis } from './services/apiService.js';
 import { AudioStreamManager } from './services/audioStreamService.js';
 import { getActiveUser, logout as doLogout } from './services/authService.js';
 
@@ -15,6 +15,7 @@ const appElement = document.querySelector<HTMLDivElement>('#app')!;
 let isRecordingActive = false;
 let currentSessionId = '';
 let cbtStepState: 'catch' | 'challenge' | 'replace' = 'catch';
+let sessionHistory: ChatMessage[] = [];
 const audioManager = new AudioStreamManager();
 let waveformVis: WaveformVisualizer | null = null;
 let particlesInst: ParticlesCanvas | null = null;
@@ -80,6 +81,7 @@ function renderApp(): void {
   }
 
   cbtStepState = 'catch';
+  sessionHistory = [];
 
   // Render Main CBT Therapy View - Plus Jakarta Sans Aesthetic
   appElement.innerHTML = `
@@ -242,8 +244,9 @@ function bindMainEvents(): void {
           appendChatTurn(messagesList, speakerRole, transcriptText, speakerRole === 'USER');
 
           if (speakerRole === 'USER') {
+            sessionHistory.push({ role: 'user', content: transcriptText });
             if (waveformVis) waveformVis.startAnimating(false);
-            
+
             // Show thinking indicator
             const thinkingEl = document.createElement('div');
             thinkingEl.className = 'flex justify-start my-2 text-xs text-[#cc785c] animate-pulse font-medium px-4';
@@ -265,29 +268,29 @@ function bindMainEvents(): void {
               return;
             }
 
-            // 2. Human Empathetic State Progression
+            // 2. Human Empathetic State Progression with Context History
+            const cbtResponse = await requestCbtAnalysis(transcriptText, sessionHistory);
+            if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
+            if (!isRecordingActive) return;
+
+            const responseMessage = cbtResponse.empathySummary
+              ? `${cbtResponse.empathySummary}\n\n${cbtResponse.challengeQuestion}`
+              : cbtResponse.challengeQuestion;
+
             if (cbtStepState === 'catch') {
               cbtStepState = 'challenge';
               updateGuidanceCard('challenge');
+            } else if (cbtResponse.replacementThought) {
+              cbtStepState = 'replace';
+              updateGuidanceCard('replace');
+            }
 
-              const cbtResponse = await requestCbtAnalysis(transcriptText);
-              if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
-              if (!isRecordingActive) return;
-              appendChatTurn(messagesList, 'SOCRATES', cbtResponse.challengeQuestion, false);
+            appendChatTurn(messagesList, 'SOCRATES', responseMessage, false);
+            sessionHistory.push({ role: 'assistant', content: responseMessage });
 
-              if (cbtResponse.replacementThought) {
-                setTimeout(() => {
-                  if (!isRecordingActive) return;
-                  cbtStepState = 'replace';
-                  updateGuidanceCard('replace');
-                  appendChatTurn(messagesList, 'SOCRATES', cbtResponse.replacementThought, false);
-                }, 2500);
-              }
-            } else {
-              const cbtResponse = await requestCbtAnalysis(transcriptText);
-              if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
-              if (!isRecordingActive) return;
-              appendChatTurn(messagesList, 'SOCRATES', cbtResponse.challengeQuestion, false);
+            if (cbtResponse.replacementThought && cbtStepState === 'replace') {
+              appendChatTurn(messagesList, 'SOCRATES', cbtResponse.replacementThought, false);
+              sessionHistory.push({ role: 'assistant', content: cbtResponse.replacementThought });
             }
           } else {
             if (waveformVis) waveformVis.startAnimating(true);
