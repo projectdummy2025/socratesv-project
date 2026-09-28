@@ -1,16 +1,17 @@
-# AssemblyAI Real-time STT — Core Spec
+# AssemblyAI Integration Reference — Socrates-Voice
 
-Source: https://www.assemblyai.com/docs/streaming/getting-started/transcribe-streaming-audio
+## 1. Overview
+Socrates-Voice utilizes AssemblyAI for real-time speech recognition and voice token management:
+- **Real-time STT Token Generation**: Backend generates short-lived WebSocket tokens (`expires_in_seconds=300`).
+- **Streaming Client**: Web Audio API streams PCM 16-bit 16kHz audio from client browser to AssemblyAI.
+- **Native Browser Fallback**: Web Speech API (`id-ID`) for localized Indonesian speech recognition.
 
-## 1. Important Rules
-- Billed per open WebSocket duration. Always run `client.disconnect(terminate=True)` or send `{"type": "Terminate"}` JSON.
-- Real-time token endpoint: `GET https://streaming.assemblyai.com/v3/token?expires_in_seconds=300` (HTTP Method `GET`).
-- WebSocket URL: `wss://streaming.assemblyai.com/v3/ws?token=<token>&sample_rate=16000&encoding=pcm_s16le`.
-- Default Model: `universal-3-5-pro` (English `en-US`).
-- Native Browser Fallback: Web Speech API (`SpeechRecognition` / `webkitSpeechRecognition`) with `lang = 'id-ID'` for Indonesian speech recognition.
+---
 
-## 2. Server-side Token Generation (Node.js/Fastify)
-```javascript
+## 2. Server-side Token Generation (Fastify Node.js Backend)
+
+```typescript
+// Token Endpoint: GET https://streaming.assemblyai.com/v3/token?expires_in_seconds=300
 const apiResponse = await fetch('https://streaming.assemblyai.com/v3/token?expires_in_seconds=300', {
   method: 'GET',
   headers: {
@@ -21,7 +22,10 @@ const { token } = await apiResponse.json();
 const websocketUrl = `wss://streaming.assemblyai.com/v3/ws?token=${token}&sample_rate=16000&encoding=pcm_s16le`;
 ```
 
-## 3. Web Audio API PCM 16-bit 16kHz Client Streaming
+---
+
+## 3. Client Audio Streaming (Web Audio API PCM 16-bit 16kHz)
+
 ```javascript
 const audioCtx = new AudioContext({ sampleRate: 16000 });
 const sourceNode = audioCtx.createMediaStreamSource(mediaStream);
@@ -40,3 +44,10 @@ processorNode.onaudioprocess = (e) => {
 sourceNode.connect(processorNode);
 processorNode.connect(audioCtx.destination);
 ```
+
+---
+
+## 4. WebSocket Termination Protocol
+Always close WebSocket connections properly to prevent unwanted usage:
+- Send `{"type": "Terminate"}` JSON message before closing socket.
+- Call `socket.close(1000, "User stopped session")`.

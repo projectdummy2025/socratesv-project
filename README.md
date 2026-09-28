@@ -336,6 +336,10 @@ socrates-voice/
 │   ├── requirements.txt     # Dependensi pustaka Python
 │   └── Dockerfile           # Spesifikasi kontainer Docker Python
 ├── docs/                    # Berkas dokumentasi arsitektur
+│   ├── assemblyai-integration.md # Spesifikasi integrasi AssemblyAI Realtime
+│   ├── basis-topik.md       # Konsep dasar terapi CBT 3 langkah
+│   ├── gemma-gemini-api-reference.md # Panduan pemanggilan Google GenAI SDK
+│   ├── tech-stack.md        # Dokumen arsitektur dan spesifikasi teknologi
 │   └── socrates-voice-banner.svg # Banner SVG Diagram Arsitektur
 ├── .env.example             # Template variabel lingkungan
 ├── docker-compose.yml       # Orchestration kontainer sistem
