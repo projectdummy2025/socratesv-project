@@ -1,7 +1,13 @@
 import { FastifyInstance } from 'fastify';
 
+interface ChatMessage {
+  role: string;
+  content: string;
+}
+
 interface CbtAnalyzeRequest {
   userThought: string;
+  conversationHistory?: ChatMessage[];
 }
 
 // CBT Proxy route to forward requests to Python microservice
@@ -28,6 +34,7 @@ export async function cbtRoutes(fastifyInstance: FastifyInstance): Promise<void>
     // Fallback response if Python microservice is offline
     return reply.code(200).send({
       currentStep: 'challenge',
+      empathySummary: `Saya mengerti dan dapat merasakan betapa beratnya situasi ini untuk Anda.`,
       challengeQuestion: `Apakah ada bukti nyata yang mendukung pikiran: '${requestBody?.userThought || ''}'?`,
       replacementThought: 'Mari kita pertimbangkan situasi ini dari perspektif yang lebih seimbang.'
     });
