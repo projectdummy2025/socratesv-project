@@ -9,8 +9,14 @@ export interface CrisisResponseData {
   riskLevel: string;
 }
 
+export interface ChatMessage {
+  role: string;
+  content: string;
+}
+
 export interface CbtAnalysisResponseData {
   currentStep: string;
+  empathySummary?: string;
   challengeQuestion: string;
   replacementThought: string;
 }
@@ -62,14 +68,14 @@ export async function requestCrisisCheck(sessionId: string, userTranscript: stri
   return { isDangerous: false, riskLevel: 'low' };
 }
 
-// Request Gemini CBT Socratic analysis from backend
-export async function requestCbtAnalysis(userThought: string): Promise<CbtAnalysisResponseData> {
+// Request Gemini CBT Socratic analysis from backend with conversation history
+export async function requestCbtAnalysis(userThought: string, conversationHistory: ChatMessage[] = []): Promise<CbtAnalysisResponseData> {
   const backendUrl = getBackendUrl();
   try {
     const apiResponse = await fetch(`${backendUrl}/api/cbt/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userThought })
+      body: JSON.stringify({ userThought, conversationHistory })
     });
     if (apiResponse.ok) {
       return await apiResponse.json() as CbtAnalysisResponseData;
@@ -80,6 +86,7 @@ export async function requestCbtAnalysis(userThought: string): Promise<CbtAnalys
 
   return {
     currentStep: 'challenge',
+    empathySummary: 'Saya mendengar dan memahami perasaan Anda.',
     challengeQuestion: `Apakah ada bukti nyata yang mendukung pikiran: '${userThought}'?`,
     replacementThought: 'Mari kita pertimbangkan situasi ini dari perspektif yang lebih seimbang.'
   };
