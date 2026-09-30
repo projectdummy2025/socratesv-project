@@ -6,47 +6,56 @@ from google.genai import types
 from utils.logger import get_log_timestamp
 from schemas import ChatMessage, ThoughtOutput
 
-# System prompt for empathetic CBT Socratic questioning and active listening
+# System prompt for empathetic CBT Socratic questioning and active listening in natural English
 CBT_SYSTEM_PROMPT = (
-    "You are Socrates, a compassionate and empathetic CBT therapist guiding a client through Cognitive Restructuring in Indonesian. "
-    "First, validate the user's emotion and summarize their experience empathetically (empathySummary) using active listening. "
-    "Second, provide ONE thoughtful Socratic challenge question (challengeQuestion). "
-    "Third, provide ONE balanced replacement perspective (replacementThought)."
+    "You are Socrates, a warm, highly empathetic, and fluid Cognitive Behavioral Therapy (CBT) practitioner. "
+    "Your dialogue must be natural, conversational, soothing, and human in English—never sound like a rigid query chatbot or a template. "
+    "1. Empathy & Active Listening (empathySummary): Validate the user's emotion warmly and acknowledge their experience naturally. "
+    "2. Socratic Exploration (challengeQuestion): Ask ONE gentle, insightful reflective question that invites them to examine their thought. "
+    "3. Balanced Perspective (replacementThought): Offer ONE comforting, grounded alternative perspective that brings peace of mind."
 )
 
-# Initialize Google GenAI client instance
-def create_genai_client() -> genai.Client | None:
+# Global cached GenAI client instance to eliminate per-request SSL/TLS initialization overhead
+_cached_genai_client: genai.Client | None = None
+
+def get_genai_client() -> genai.Client | None:
+    global _cached_genai_client
+    if _cached_genai_client is not None:
+        return _cached_genai_client
+
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
     if not api_key:
         print(f"{get_log_timestamp()} Warning: GEMINI_API_KEY environment variable not set")
         return None
     try:
-        return genai.Client(api_key=api_key)
+        _cached_genai_client = genai.Client(api_key=api_key)
+        return _cached_genai_client
     except Exception as init_error:
         print(f"{get_log_timestamp()} Failed initializing GenAI client: {init_error}")
         return None
 
 # Format conversation turns into prompt context string
 def format_conversation_context(thoughtText: str, historyTurns: List[ChatMessage]) -> str:
-    if not historyTurns:
-        return f"Pikiran/ungkapan pengguna: {thoughtText}"
+    past_turns = [t for t in historyTurns if not (t.role == "user" and t.content == thoughtText)]
+    if not past_turns:
+        return f"User expressed: {thoughtText}"
 
     formatted_turns = []
-    for turn in historyTurns[-6:]:
-        speaker = "Pengguna" if turn.role == "user" else "Socrates"
+    for turn in past_turns[-6:]:
+        speaker = "User" if turn.role == "user" else "Socrates"
         formatted_turns.append(f"{speaker}: {turn.content}")
 
     history_block = "\n".join(formatted_turns)
-    return f"Riwayat percakapan sebelumnya:\n{history_block}\n\nPikiran/ungkapan terbaru pengguna: {thoughtText}"
+    return f"Previous conversation history:\n{history_block}\n\nLatest user thought: {thoughtText}"
 
 # Process negative thought using CBT Socratic reasoning framework
 def process_cbt_thought(thoughtText: str, conversationHistory: List[ChatMessage] = []) -> ThoughtOutput:
     print(f"{get_log_timestamp()} Processing CBT thought restructuring with context")
-    genai_client = create_genai_client()
+    genai_client = get_genai_client()
 
-    default_empathy = f"Saya mendengar dan memahami bahwa situasi ini terasa berat bagi Anda saat memikirkan: '{thoughtText}'."
-    default_challenge = f"Apakah ada bukti nyata yang mendukung pikiran: '{thoughtText}'?"
-    default_replacement = "Mari kita pertimbangkan situasi ini dari sudut pandang yang lebih seimbang."
+    default_empathy = f"I hear how heavy and exhausting this situation feels for you right now."
+    default_challenge = f"When this thought comes up, is there another perspective that might bring you some peace of mind?"
+    default_replacement = "You are doing your best, and it is completely okay to take things one gentle step at a time."
 
     if not genai_client:
         return ThoughtOutput(
