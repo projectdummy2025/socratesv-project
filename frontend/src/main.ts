@@ -29,30 +29,30 @@ function updateGuidanceCard(step: 'catch' | 'challenge' | 'replace'): void {
     stepBannerEl.innerHTML = `
       <div class="flex items-center space-x-2 mb-2">
         <span class="w-2 h-2 rounded-full bg-[#cc785c] animate-pulse"></span>
-        <span class="text-xs font-semibold text-[#cc785c] uppercase tracking-wider">Ruang Aman Berbagi</span>
+        <span class="text-xs font-semibold text-[#cc785c] uppercase tracking-wider">Safe Sharing Space</span>
       </div>
       <p class="text-xs sm:text-sm text-[#3d3d3a] leading-relaxed font-sans">
-        Ceritakan apa yang sedang membuat pikiran Anda terasa berat saat ini. Saya mendengarkan dengan penuh perhatian.
+        Share what is currently weighing on your mind. I am listening attentively.
       </p>
     `;
   } else if (step === 'challenge') {
     stepBannerEl.innerHTML = `
       <div class="flex items-center space-x-2 mb-2">
         <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-        <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider">Refleksi Bersama</span>
+        <span class="text-xs font-semibold text-amber-700 uppercase tracking-wider">Joint Reflection</span>
       </div>
       <p class="text-xs sm:text-sm text-[#3d3d3a] leading-relaxed font-sans">
-        Mari kita lihat situasi ini bersama-sama dari sudut pandang yang lebih jernih dan objektif.
+        Let us examine this situation together from a clearer and more objective viewpoint.
       </p>
     `;
   } else if (step === 'replace') {
     stepBannerEl.innerHTML = `
       <div class="flex items-center space-x-2 mb-2">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Perspektif yang Tenang</span>
+        <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Calm Perspective</span>
       </div>
       <p class="text-xs sm:text-sm text-[#3d3d3a] leading-relaxed font-sans">
-        Sudut pandang alternatif yang lebih seimbang dan lega untuk menenangkan hati Anda.
+        An alternative perspective that is more balanced and reassuring for your peace of mind.
       </p>
     `;
   }
@@ -99,10 +99,10 @@ function renderApp(): void {
         <div id="stepBanner" class="bg-[#efe9de] border border-[#e6dfd8] rounded-2xl p-5 text-sm shadow-sm transition-all duration-300 mt-2 mb-4">
           <div class="flex items-center space-x-2 mb-2">
             <span class="w-2 h-2 rounded-full bg-[#cc785c] animate-pulse"></span>
-            <span class="text-xs font-semibold text-[#cc785c] uppercase tracking-wider">Ruang Aman Berbagi</span>
+            <span class="text-xs font-semibold text-[#cc785c] uppercase tracking-wider">Safe Sharing Space</span>
           </div>
           <p class="text-xs sm:text-sm text-[#3d3d3a] leading-relaxed font-sans">
-            Ceritakan apa yang sedang membuat pikiran Anda terasa berat saat ini. Saya mendengarkan dengan penuh perhatian.
+            Share what is currently weighing on your mind. I am listening attentively.
           </p>
         </div>
 
@@ -111,7 +111,7 @@ function renderApp(): void {
             <div class="bg-[#181715] text-[#faf9f5] border border-slate-800/80 rounded-2xl rounded-tl-none p-5 text-sm max-w-[95%] space-y-2 shadow-xl">
               <span class="text-[11px] text-[#cc785c] font-semibold block tracking-widest uppercase mb-1">SOCRATES</span>
               <p class="leading-relaxed text-sm md:text-base font-normal text-[#faf9f5]">
-                "Halo. Apa yang sedang membebani perasaan atau pikiran Anda saat ini?"
+                "Hello. What is weighing on your feelings or thoughts right now?"
               </p>
             </div>
           </div>
@@ -132,7 +132,7 @@ function renderApp(): void {
             </button>
           </div>
           <p id="statusHint" class="text-center text-[11px] text-[#6c6a64] font-medium mt-2">
-            Tekan tombol di atas untuk mulai bicara
+            Press the button above to start speaking
           </p>
         </div>
       </footer>
@@ -197,7 +197,7 @@ function bindMainEvents(): void {
       micLabel.textContent = 'START';
     }
     if (statusHint) {
-      statusHint.textContent = 'Tekan tombol di atas untuk mulai bicara';
+      statusHint.textContent = 'Press the button above to start speaking';
     }
   }
 
@@ -213,7 +213,7 @@ function bindMainEvents(): void {
 
       // Start recording
       isRecordingActive = true;
-      
+
       // Auto-hide Guidance Card & Dock Nav, smoothly float controls footer down to bottom-0
       if (stepBanner) stepBanner.classList.add('hidden');
       if (dockNav) dockNav.classList.add('hidden');
@@ -226,11 +226,11 @@ function bindMainEvents(): void {
       micLabel.textContent = 'STOP';
       if (pulseRing) pulseRing.classList.remove('hidden');
       if (waveformVis) waveformVis.startAnimating(false);
-      statusHint.textContent = 'Mendengarkan... Bicara pikiran Anda.';
+      statusHint.textContent = 'Listening... Speak your thoughts.';
 
       const activeUser = getActiveUser();
       const sessionData = await requestNewSession(activeUser?.userId, activeUser?.userEmail?.split('@')[0]);
-      
+
       if (!isRecordingActive) {
         stopRecordingSession();
         return;
@@ -244,34 +244,31 @@ function bindMainEvents(): void {
           appendChatTurn(messagesList, speakerRole, transcriptText, speakerRole === 'USER');
 
           if (speakerRole === 'USER') {
+            const historySnapshot = [...sessionHistory];
             sessionHistory.push({ role: 'user', content: transcriptText });
             if (waveformVis) waveformVis.startAnimating(false);
 
             // Show thinking indicator
             const thinkingEl = document.createElement('div');
             thinkingEl.className = 'flex justify-start my-2 text-xs text-[#cc785c] animate-pulse font-medium px-4';
-            thinkingEl.textContent = 'SOCRATES sedang merespons...';
+            thinkingEl.textContent = 'SOCRATES is responding...';
             messagesList.appendChild(thinkingEl);
             if (messagesList.parentElement) messagesList.parentElement.scrollTop = messagesList.parentElement.scrollHeight;
 
-            // 1. Check Crisis Intent
-            const crisisCheck = await requestCrisisCheck(currentSessionId, transcriptText);
-            if (!isRecordingActive) {
-              if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
-              return;
-            }
+            // Execute Crisis Intent Check & CBT Analysis in parallel via Promise.all to eliminate sequential blocking latency
+            const [crisisCheck, cbtResponse] = await Promise.all([
+              requestCrisisCheck(currentSessionId, transcriptText),
+              requestCbtAnalysis(transcriptText, historySnapshot)
+            ]);
+
+            if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
+            if (!isRecordingActive) return;
 
             if (crisisCheck.isDangerous && crisisModal) {
-              if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
               crisisModal.classList.remove('hidden');
               stopRecordingSession();
               return;
             }
-
-            // 2. Human Empathetic State Progression with Context History
-            const cbtResponse = await requestCbtAnalysis(transcriptText, sessionHistory);
-            if (thinkingEl.parentNode) thinkingEl.parentNode.removeChild(thinkingEl);
-            if (!isRecordingActive) return;
 
             const responseMessage = cbtResponse.empathySummary
               ? `${cbtResponse.empathySummary}\n\n${cbtResponse.challengeQuestion}`
