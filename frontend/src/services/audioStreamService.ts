@@ -12,12 +12,12 @@ export class AudioStreamManager {
   private speechRecognitionInstance: any | null = null;
   private isCancelled = false;
 
-  // Start recording audio from microphone and stream to AssemblyAI / Web Speech API (Indonesian id-ID)
+  // Start recording audio from microphone and stream to AssemblyAI / Web Speech API (en-US)
   public async startStreaming(websocketUrl: string, callbacks: AudioStreamCallbacks): Promise<void> {
     this.stopStreaming(); // Ensure previous connections are fully closed
     this.isCancelled = false;
 
-    // 1. Try Native Web Speech API with Indonesian (id-ID) for accurate local speech recognition
+    // 1. Try Native Web Speech API with English (en-US) for speech recognition
     const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (SpeechRec) {
@@ -34,7 +34,7 @@ export class AudioStreamManager {
             if (event.results[i].isFinal) {
               const transcriptText = event.results[i][0].transcript.trim();
               if (transcriptText) {
-                console.log('(SpeechRec) Recognized Indonesian speech:', transcriptText);
+                console.log('(SpeechRec) Recognized speech:', transcriptText);
                 callbacks.onTranscript('USER', transcriptText);
               }
             }
@@ -57,7 +57,7 @@ export class AudioStreamManager {
         };
 
         recognition.start();
-        console.log('(AudioStream) Native Indonesian SpeechRecognition started');
+        console.log('(AudioStream) Native English SpeechRecognition started');
         return;
       } catch (nativeErr) {
         console.warn('(AudioStream) Native SpeechRecognition fallback to WebSocket:', nativeErr);
