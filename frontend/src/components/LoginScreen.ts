@@ -12,12 +12,12 @@ export function getLoginScreenHTML(): string {
         <div class="space-y-3">
           <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-[#141413]">Socrates Voice</h1>
           <p class="text-sm text-[#6c6a64] leading-relaxed max-w-md mx-auto font-normal">
-            Pendamping terapi Restrukturisasi Kognitif (CBT) berbasis suara.
+            Voice-based Cognitive Behavioral Therapy (CBT) Restructuring companion.
           </p>
         </div>
         <div class="space-y-4 pt-2 max-w-sm mx-auto w-full">
           <!-- Name input optional -->
-          <input id="guestNameInput" type="text" placeholder="Nama panggilan (opsional)" maxlength="30"
+          <input id="guestNameInput" type="text" placeholder="Display name (optional)" maxlength="30"
             class="w-full py-3 px-4 rounded-xl bg-white border border-[#e6dfd8] text-sm text-[#141413] placeholder:text-[#9a9895] focus:outline-none focus:border-[#cc785c] focus:ring-1 focus:ring-[#cc785c]/30 transition-all" />
 
           <button id="googleAuthBtn" type="button" class="w-full py-3.5 px-5 rounded-xl bg-[#efe9de] sm:bg-[#faf9f5] hover:bg-white border border-[#e6dfd8] text-[#141413] text-sm font-medium flex items-center justify-center space-x-3 transition-all active:scale-95 shadow-sm cursor-pointer">
@@ -27,24 +27,24 @@ export function getLoginScreenHTML(): string {
               <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.4 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/>
               <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.1-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"/>
             </svg>
-            <span>Lanjutkan dengan Google</span>
+            <span>Continue with Google</span>
           </button>
           <button id="githubAuthBtn" type="button" class="w-full py-3.5 px-5 rounded-xl bg-[#efe9de] sm:bg-[#faf9f5] hover:bg-white border border-[#e6dfd8] text-[#141413] text-sm font-medium flex items-center justify-center space-x-3 transition-all active:scale-95 shadow-sm cursor-pointer">
             <svg class="w-5 h-5 fill-current text-[#141413]" viewBox="0 0 24 24">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
             </svg>
-            <span>Lanjutkan dengan GitHub</span>
+            <span>Continue with GitHub</span>
           </button>
           <div class="relative my-4 flex items-center justify-center">
             <div class="border-t border-[#e6dfd8] w-full"></div>
-            <span class="bg-[#faf9f5] sm:bg-[#efe9de] px-3 text-[10px] text-[#6c6a64] font-medium uppercase tracking-wider absolute">atau</span>
+            <span class="bg-[#faf9f5] sm:bg-[#efe9de] px-3 text-[10px] text-[#6c6a64] font-medium uppercase tracking-wider absolute">or</span>
           </div>
           <button id="guestAuthBtn" type="button" class="w-full py-3.5 px-5 rounded-xl bg-[#cc785c] hover:bg-[#a9583e] text-white text-sm font-semibold transition-all shadow-md shadow-[#cc785c]/20 active:scale-95 cursor-pointer">
-            Masuk Sesi Tamu
+            Enter Guest Session
           </button>
         </div>
         <p class="text-xs text-[#6c6a64] leading-normal pt-1 font-normal">
-          Privat & Terenkripsi. Mengadopsi pedoman MIND-SAFE.
+          Private & Encrypted. Adopting MIND-SAFE guidelines.
         </p>
       </div>
     </div>
