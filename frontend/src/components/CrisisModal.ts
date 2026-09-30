@@ -6,17 +6,17 @@ export function getCrisisModalHTML(): string {
         <div class="w-12 h-12 rounded-full bg-rose-900 text-rose-200 flex items-center justify-center mx-auto text-xl font-extrabold">
           !
         </div>
-        <h2 class="text-lg font-bold text-rose-200">Deteksi Situasi Darurat</h2>
+        <h2 class="text-lg font-bold text-rose-200">Emergency Situation Detected</h2>
         <p class="text-xs text-rose-300 leading-relaxed">
-          Kami mendeteksi ungkapan krisis atau risiko bahaya. Sesi bimbingan suara dihentikan sementara.
+          We detected crisis expressions or safety risks. The voice guidance session has been paused.
         </p>
         <div class="bg-slate-900 border border-rose-800 rounded-xl p-3 text-left space-y-2 text-xs">
-          <p class="font-bold text-slate-200">Layanan Bantuan 24 Jam:</p>
-          <p class="text-emerald-400 font-bold">119 (Layanan Darurat Kemenkes)</p>
-          <p class="text-slate-300">Kemenkes Hotline: 1500-567</p>
+          <p class="font-bold text-slate-200">24-Hour Crisis Support Services:</p>
+          <p class="text-emerald-400 font-bold">988 (Suicide & Crisis Lifeline)</p>
+          <p class="text-slate-300">Emergency Services: 911 / 112</p>
         </div>
         <button id="closeCrisisBtn" class="w-full py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-all">
-          Tutup & Mengerti
+          Close & Understand
         </button>
       </div>
     </div>
