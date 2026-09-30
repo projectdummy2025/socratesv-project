@@ -5,7 +5,7 @@ export function getHeaderHTML(userEmail?: string): string {
       <div class="flex items-center space-x-3">
         <div>
           <h1 class="text-lg md:text-xl font-bold tracking-tight text-[#141413]">Socrates Voice</h1>
-          <p class="text-[11px] text-[#6c6a64] font-medium tracking-tight">${userEmail || 'Pengguna CBT'}</p>
+          <p class="text-[11px] text-[#6c6a64] font-medium tracking-tight">${userEmail || 'CBT User'}</p>
         </div>
       </div>
 
