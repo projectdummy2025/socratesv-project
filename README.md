@@ -1,152 +1,135 @@
 <div align="center">
 
-  <img src="docs/socrates-voice-banner.svg" alt="Socrates Voice Architecture &amp; Cognitive Flow" width="100%" />
-
-  <br />
-  <br />
+  <img src="docs/socrates-voice-banner.svg" alt="Socrates Voice Architecture and Cognitive Flow" width="100%" />
 
   # Socrates Voice
 
   <p align="center">
-    <b>Platform Asisten Terapi Suara Berbasis Metodologi Cognitive Behavioral Therapy (CBT)</b>
+    <b>Voice-Based Cognitive Behavioral Therapy (CBT) Companion Platform</b>
   </p>
 
   <p align="center">
-    <a href="#panduan-instalasi-dan-setup">Panduan Setup</a>
-    &nbsp;•&nbsp;
-    <a href="#panduan-penggunaan-aplikasi">Cara Penggunaan</a>
-    &nbsp;•&nbsp;
-    <a href="#arsitektur-dan-teknologi">Arsitektur Teknikal</a>
-    &nbsp;•&nbsp;
-    <a href="#dokumentasi-api">Dokumentasi API</a>
+    <a href="#key-features">Features</a>
+    &nbsp;&bull;&nbsp;
+    <a href="#installation-and-setup-guide">Quick Start</a>
+    &nbsp;&bull;&nbsp;
+    <a href="#technical-architecture">Docs</a>
+    &nbsp;&bull;&nbsp;
+    <a href="#api-documentation">API</a>
+    &nbsp;&bull;&nbsp;
+    <a href="#license-and-contribution">Contributing</a>
   </p>
 
-  <br />
-
-  <table align="center">
-    <tr>
-      <th align="center">Metodologi Terapi</th>
-      <td align="center"><b>1. Catch</b> &nbsp;&mdash;&nbsp; <b>2. Challenge</b> &nbsp;&mdash;&nbsp; <b>3. Replace</b></td>
-    </tr>
-  </table>
-
-  <br />
-
   <p align="center">
-    <img src="https://img.shields.io/badge/Node.js-18%2B-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js" />
-    <img src="https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/Fastify-4.28-000000?style=flat-square&logo=fastify&logoColor=white" alt="Fastify" />
+    <img src="https://img.shields.io/badge/version-v1.0.0-blue.svg?style=flat-square" alt="version" />
+    <img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="license" />
+    <img src="https://img.shields.io/badge/node-20_LTS-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="node" />
+    <img src="https://img.shields.io/badge/Fastify-%5E4.28-000000?style=flat-square&logo=fastify&logoColor=white" alt="Fastify" />
     <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python" />
-    <img src="https://img.shields.io/badge/FastAPI-0.111-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
-    <img src="https://img.shields.io/badge/Vite-5.3-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite" />
-    <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
-    <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL" />
-    <img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License MIT" />
+    <img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
+    <img src="https://img.shields.io/badge/docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white" alt="docker" />
+    <img src="https://img.shields.io/badge/TypeScript-~5.5-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
   </p>
 
 </div>
 
 ---
 
-## Daftar Isi
+## Table of Contents
 
-- [Ringkasan Proyek](#ringkasan-proyek)
-- [Fitur Utama](#fitur-utama)
-- [Arsitektur dan Teknologi](#arsitektur-dan-teknologi)
-- [Persyaratan Sistem](#persyaratan-sistem)
-- [Panduan Instalasi dan Setup](#panduan-instalasi-dan-setup)
-  - [Metode A: Deployment via Docker Compose](#metode-a-deployment-via-docker-compose)
-  - [Metode B: Eksekusi Manual (Development Mode)](#metode-b-eksekusi-manual-development-mode)
-- [Panduan Penggunaan Aplikasi](#panduan-penggunaan-aplikasi)
-- [Protokol Keselamatan Crisis Intervention](#protokol-keselamatan-crisis-intervention)
-- [Dokumentasi API](#dokumentasi-api)
-- [Struktur Direktori Proyek](#struktur-direktori-proyek)
-- [Pengujian Sistem](#pengujian-sistem)
-- [Lisensi dan Kontribusi](#lisensi-dan-kontribusi)
-
----
-
-## Ringkasan Proyek
-
-**Socrates Voice** adalah platform asisten terapi suara interaktif yang memanfaatkan prinsip-prinsip *Cognitive Behavioral Therapy* (CBT). Sistem ini membantu pengguna mengurai dan merekonstruksi pola pikir negatif secara terstruktur melalui percakapan audio real-time berbasis kecerdasan buatan dan dialog Sokratik.
-
-Metodologi sistem berpusat pada **3 Langkah Restrukturisasi Kognitif**:
-
-1. **Catch (Menangkap)**  
-   Mengidentifikasi *Automatic Negative Thoughts* (ANTs) atau pemikiran otomatis negatif yang disampaikan pengguna dalam sesi suara.
-2. **Challenge (Menantang)**  
-   Membimbing pengguna mengevaluasi validitas serta distorsi kognitif dari pemikiran tersebut menggunakan pertanyaan Sokratik yang analitis.
-3. **Replace (Mengganti)**  
-   Membantu pengguna merumuskan sudut pandang alternatif yang objektif, konstruktif, dan rasional.
-
-Integrasi dilakukan menggunakan **AssemblyAI Voice Agent API** (*Universal-3.5-Pro*) untuk komunikasi audio latensi rendah (*Barge-In* dan *Neural Turn Detection*), dipadukan dengan kecerdasan kognitif dari **Google Gemini API**.
+- [Project Overview](#project-overview)
+- [Key Features](#key-features)
+- [Technical Architecture](#technical-architecture)
+- [System Requirements](#system-requirements)
+- [Installation and Setup Guide](#installation-and-setup-guide)
+  - [Method A: Deployment via Docker Compose](#method-a-deployment-via-docker-compose)
+  - [Method B: Manual Execution (Development Mode)](#method-b-manual-execution-development-mode)
+- [Application Usage Workflow](#application-usage-workflow)
+- [Crisis Intervention and Safety Protocol](#crisis-intervention-and-safety-protocol)
+- [API Documentation](#api-documentation)
+- [Project Directory Structure](#project-directory-structure)
+- [System Verification and Tests](#system-verification-and-tests)
+- [License and Contribution](#license-and-contribution)
 
 ---
 
-## Fitur Utama
+## Project Overview
 
-- **Komunikasi Audio Real-Time**: Interaksi dua arah berbasis suara secara natural dengan pengenalan jeda wicara otomatis (*Neural Turn Detection*).
-- **Dukungan Interupsi (Barge-In)**: Pengguna dapat menyela pembicaraan agen AI secara langsung tanpa perlu menunggu agen selesai berbicara.
-- **Alur Terapi CBT Terstruktur**: Proses 3-Langkah interaktif yang dirancang untuk membantu dekonstruksi distorsi kognitif.
-- **Deteksi Krisis Real-Time (MIND-SAFE Framework)**: Pemantauan otomatis transkrip percakapan untuk mengidentifikasi potensi bahaya atau kecenderungan krisis fisik, yang akan langsung mengalihkan sistem ke modul intervensi darurat.
-- **Generasi Artefak Klinis Pasca-Sesi**: Menghasilkan rekaman audio (.ogg), transkrip interaktif berstempel waktu, serta ringkasan klinis CBT yang siap digunakan untuk konsultasi dengan tenaga medis profesional.
+**Socrates Voice** is an interactive, voice-first Cognitive Behavioral Therapy (CBT) assistant. The system guides users through cognitive restructuring in structured, real-time voice conversations using active listening and Socratic questioning.
+
+The core therapy methodology follows the **3-Step Cognitive Restructuring Model**:
+
+1. **Catch**
+   Identifies Automatic Negative Thoughts (ANTs) verbalized by the user during the voice session.
+2. **Challenge**
+   Guides the user to evaluate validity, evidence, and cognitive distortions through analytical Socratic questioning.
+3. **Replace**
+   Helps the user formulate balanced, constructive, and objective alternative perspectives.
+
+Audio streaming integrates **AssemblyAI Voice Agent API** / Web Speech API for low-latency voice capture, coupled with **Google Gemini API** for structured cognitive reasoning and context progression.
 
 ---
 
-## Arsitektur dan Teknologi
+## Key Features
 
-Platform menggunakan arsitektur microservices terdistribusi untuk memastikan pemisahan tanggung jawab yang rapi dan skalabel:
+- **Real-Time Voice Interaction**: Bidirectional voice interaction with automatic turn detection and active listening.
+- **Context-Aware Socratic Flow**: Preserves multi-turn session history to maintain continuity across dialogue turns.
+- **Structured 3-Step CBT Workflow**: Linear progression across Catch, Challenge, and Replace therapy states.
+- **Real-Time Crisis Detection (MIND-SAFE Protocol)**: Monitors transcripts for safety risks and pauses sessions immediately when crisis signals are identified.
+- **Sleek Minimalist Interface**: Built with Tailwind CSS, custom waveform visualizer, and particle canvas ambiance.
 
-| Layer Komponen | Teknologi Utama | Peran dan Tanggung Jawab |
+---
+
+## Technical Architecture
+
+The platform uses a distributed microservice architecture:
+
+| Component Layer | Core Technology | Responsibilities |
 | :--- | :--- | :--- |
-| **Frontend UI** | React, Vite, TypeScript, Tailwind CSS | Antarmuka pengguna interaktif dan pemrosesan audio browser |
-| **Backend Gateway** | Node.js (v18+), Fastify, Drizzle ORM | Gateway manajemen sesi, koneksi WebSocket, dan persistensi database |
-| **CBT Service** | Python (v3.10+), FastAPI | Microservice pemrosesan logika CBT dan integrasi Google Gemini API |
-| **Voice Engine** | AssemblyAI Voice Agent API | Model *Universal-3.5-Pro* untuk Speech-to-Text real-time dan TTS |
-| **LLM Engine** | Google Gemini API | Penalaran kognitif dan pembentukan dialog Sokratik (`gemma-4-26b`) |
-| **Database** | PostgreSQL 16 | Penyimpanan data pengguna, riwayat sesi, transkrip, dan audit log |
-| **Containerization** | Docker & Docker Compose | Pengemas dependensi dan eksekusi layanan multi-kontainer |
+| **Frontend UI** | Vite, TypeScript, Tailwind CSS | Voice recording, waveform visualization, and chat timeline UI |
+| **Backend Gateway** | Node.js (v18+), Fastify, Drizzle ORM | Session management gateway, database persistence, and service routing |
+| **CBT Service** | Python (v3.10+), FastAPI | CBT analysis engine and Google Gemini API integration |
+| **Voice Engine** | AssemblyAI / Web Speech API | Real-time speech-to-text transcription |
+| **LLM Engine** | Google Gemini API | Empathetic summary and Socratic restructuring generation |
+| **Database** | PostgreSQL 16 | User records, sessions, and crisis audit events |
+| **Containerization** | Docker / Podman & Docker Compose | Multi-container orchestration |
 
 ---
 
-## Persyaratan Sistem
+## System Requirements
 
-Pastikan perangkat atau server telah memenuhi spesifikasi minimum berikut sebelum memulai instalasi:
-
-- **Node.js**: v18.0.0 atau versi lebih baru
-- **npm**: v9.0.0 atau versi lebih baru
-- **Python**: v3.10 atau versi lebih baru (`pip` dan `venv`)
-- **Docker Desktop & Docker Compose**: Versi terbaru (Sangat direkomendasikan)
-- **PostgreSQL**: v16 (Apabila dijalankan secara native tanpa Docker)
+- **Node.js**: v18.0.0 or newer
+- **npm**: v9.0.0 or newer
+- **Python**: v3.10 or newer (`pip` and `venv`)
+- **Docker / Podman with Docker Compose**: Recommended
+- **PostgreSQL**: v16 (if running natively without containers)
 - **API Keys**:
   - AssemblyAI API Key
   - Google Gemini API Key
 
 ---
 
-## Panduan Instalasi dan Setup
+## Installation and Setup Guide
 
-### 1. Kloning Repositori
-
-Unduh kode sumber proyek melalui terminal:
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/username/socrates-voice.git
 cd socrates-voice
 ```
 
-### 2. Konfigurasi Variable Lingkungan (`.env`)
+### 2. Configure Environment Variables (`.env`)
 
-Salin berkas [.env.example](file:///.env.example) menjadi `.env` pada root direktori:
+Copy `.env.example` to `.env` in the root directory:
 
 ```bash
 cp .env.example .env
 ```
 
-Sesuaikan parameter konfigurasi pada berkas `.env`:
+Ensure configuration values match your local setup:
 
 ```env
-# Services & Server Ports
+# Services and Server Ports
 PORT_FRONTEND=3000
 PORT_BACKEND=3455
 PORT_PYTHON=8080
@@ -172,19 +155,19 @@ BACKEND_SERVICE_URL=http://localhost:3455
 
 ---
 
-### Metode A: Deployment via Docker Compose
+### Method A: Deployment via Docker Compose
 
-Menjalankan layanan pendukung (Database PostgreSQL dan Python CBT Microservice) secara terisolasi:
+Start backing services (PostgreSQL and Python CBT Microservice):
 
 ```bash
 docker-compose up -d --build
 ```
 
-Verifikasi kesehatan layanan pendukung:
+Verify service endpoints:
 - **Python CBT Service**: `http://localhost:8080/health`
 - **PostgreSQL**: `localhost:5435`
 
-Jalankan **Fastify Backend** dan **Vite Frontend** di terminal terpisah:
+Run **Fastify Backend** and **Vite Frontend** in separate terminals:
 
 ```bash
 # Terminal 1: Fastify Backend
@@ -200,178 +183,129 @@ npm run dev
 
 ---
 
-### Metode B: Eksekusi Manual (Development Mode)
+### Method B: Manual Execution (Development Mode)
 
-Untuk keperluan pengujian internal dan pembuatan fitur baru:
+#### 1. PostgreSQL Database
+Ensure PostgreSQL is running on port `5435`.
 
-#### 1. Inisialisasi Database
-Pastikan layanan PostgreSQL beroperasi pada port `5435`.
-
-#### 2. Inisialisasi Python CBT Service
+#### 2. Python CBT Service
 ```bash
 cd python-service
-
-# Buat dan aktifkan lingkungan virtual
 python -m venv venv
-source venv/bin/activate  # OS Windows: venv\Scripts\activate
-
-# Install dependensi
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-
-# Eksekusi server FastAPI
 uvicorn main:app --host 0.0.0.0 --port 8080 --reload
 ```
 
-#### 3. Inisialisasi Fastify Backend
+#### 3. Fastify Backend
 ```bash
 cd backend
-
-# Install paket dependensi
 npm install
-
-# Terapkan skema basis data Drizzle ORM
 npx drizzle-kit push
-
-# Eksekusi server Fastify
 npm run dev
 ```
 
-#### 4. Inisialisasi Vite Frontend
+#### 4. Vite Frontend
 ```bash
 cd frontend
-
-# Install dependensi UI
 npm install
-
-# Eksekusi server Vite
 npm run dev
 ```
 
 ---
 
-## Panduan Penggunaan Aplikasi
+## Application Usage Workflow
 
-### Step 1: Akses Antarmuka Web
-Buka peramban web dan navigasikan ke `http://localhost:3000`.
-
-### Step 2: Memulai Sesi Suara (Step 1: Catch)
-1. Tekan tombol **Start Voice Session** dan izinkan akses mikrofon browser.
-2. Sampaikan keluhan atau beban pikiran yang dirasakan secara lisan.
-3. Agen AI akan mengenali penghentian pembicaraan secara otomatis dan menangkap poin utama pemikiran negatif.
-
-### Step 3: Evaluasi Sokratik (Step 2: Challenge)
-1. Agen AI merespons dengan pertanyaan reflektif untuk menguji keabsahan pikiran negatif tersebut.
-2. Pengguna dapat langsung menyela atau memotong penjelasan agen (*Barge-In*) jika ingin menambahkan penjelasan lisan.
-
-### Step 4: Reframing Pemikiran (Step 3: Replace)
-1. Agen AI membantu merangkum sudut pandang baru yang rasional dan seimbang berdasarkan interaksi dialog yang berlangsung.
-2. Sesi diselesaikan secara formal oleh sistem.
-
-### Step 5: Akses Artefak Sesi
-Setelah sesi berakhir, pengguna dapat meninjau dan mengunduh:
-- **Audio Recording**: Berkas suara utuh sesi terapi (.ogg).
-- **Transcript Timeline**: Transkrip percakapan terurut berdasarkan stempel waktu.
-- **CBT Clinical Summary**: Ringkasan evaluasi CBT untuk bahan konsultasi bersama profesional kesehatan jiwa.
+1. Open your browser and navigate to `http://localhost:3000`.
+2. Enter display name and click **Enter Guest Session**.
+3. Press **START** to initiate the voice session and allow microphone permissions.
+4. Speak your feelings or thoughts in English.
+5. Socrates will analyze the input, provide an empathetic validation summary, and pose a Socratic challenge question.
+6. Continue speaking to explore evidence and reach a balanced replacement perspective.
 
 ---
 
-## Protokol Keselamatan Crisis Intervention
+## Crisis Intervention and Safety Protocol
 
-Sistem Socrates Voice mengimplementasikan modul perlindungan pengguna **MIND-SAFE**:
+Socrates Voice enforces the **MIND-SAFE** safety guidelines:
 
-1. **Continuous Transcript Audit**: Setiap bait kalimat dievaluasi secara real-time oleh modul `crisis_service.py`.
-2. **Pengalihan Darurat**:
-   - Jika terdeteksi kata kunci krisis atau potensi bahaya fisik, interaksi AI akan **dihentikan seketika**.
-   - Antarmuka akan secara otomatis beralih ke moda darurat dan menampilkan kontak layanan bantuan kesehatan jiwa resmi (seperti *Hotline Kemenkes 119*).
+1. **Continuous Transcript Monitoring**: Transcripts are audited in real-time via `crisisService.ts` / `crisis_service.py`.
+2. **Emergency Protocol**: When high-risk keywords are detected, the session is paused immediately, and international crisis helpline information (e.g., 988 Lifeline, 911/112) is presented.
 
 ---
 
-## Dokumentasi API
+## API Documentation
 
 ### Fastify Backend Gateway
 
-| Endpoint | Method | Deskripsi Fungsi |
+| Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| `/health` | `GET` | Memeriksa ketersediaan server Fastify |
-| `/api/sessions` | `POST` | Membuka sesi terapi baru dan token AssemblyAI |
-| `/api/sessions/:id` | `GET` | Mengambil data rincian sesi dan transkrip |
-| `/api/cbt/process` | `POST` | Mengirim data tahapan dialog CBT |
-| `/api/crisis/evaluate` | `POST` | Mengevaluasi status keselamatan teks transkrip |
+| `/health` | `GET` | Health check endpoint |
+| `/api/session/create` | `POST` | Initialize new therapy session and voice token |
+| `/api/cbt/analyze` | `POST` | Proxy thought analysis with conversation history |
+| `/api/crisis/detect` | `POST` | Evaluate transcript text for crisis indicators |
 
 ### Python CBT Microservice
 
-| Endpoint | Method | Deskripsi Fungsi |
+| Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| `/health` | `GET` | Memeriksa status kesehatan Python service |
-| `/cbt/analyze` | `POST` | Menganalisis *Automatic Negative Thoughts* (ANTs) |
-| `/cbt/challenge` | `POST` | Mengonstruksi pertanyaan reframing Sokratik |
-| `/cbt/replace` | `POST` | Merumuskan alternatif sudut pandang rasional |
-| `/crisis/check` | `POST` | Mengevaluasi algoritma keselamatan MIND-SAFE |
+| `/health` | `GET` | Microservice health check |
+| `/api/cbt/analyze` | `POST` | Generate empathetic summary and Socratic restructuring |
+| `/api/crisis/classify` | `POST` | Classify risk level for emergency routing |
 
 ---
 
-## Struktur Direktori Proyek
+## Project Directory Structure
 
 ```
 socrates-voice/
-├── backend/                 # API Gateway Fastify & Manajemen Sesi
+├── backend/                 # Fastify API Gateway & Session Management
 │   ├── src/
-│   │   ├── db/              # Skema Drizzle ORM & koneksi database
+│   │   ├── db/              # Drizzle ORM schema & database client
 │   │   ├── routes/          # Fastify route handlers (cbt, crisis, session)
-│   │   └── services/        # Klien integrasi AssemblyAI & Python service
+│   │   └── services/        # AssemblyAI and crisis analysis services
 │   ├── package.json
 │   └── tsconfig.json
-├── frontend/                # Antarmuka Pengguna Vite + React + Tailwind CSS
+├── frontend/                # Vite + TypeScript + Tailwind CSS Frontend
 │   ├── src/
-│   │   ├── components/      # Komponen UI dan antarmuka suara
-│   │   ├── services/        # Manajemen koneksi WebSocket dan API
-│   │   └── main.ts          # Titik masuk aplikasi frontend
+│   │   ├── components/      # UI components (Header, Dock, CrisisModal, Chat)
+│   │   ├── services/        # Audio streaming, auth, and API client
+│   │   └── main.ts          # Main application entry point
 │   ├── index.html
 │   └── package.json
-├── python-service/          # Microservice FastAPI (Logika CBT & Gemini API)
-│   ├── routers/             # FastAPI Router handlers
-│   ├── services/            # Modul logika CBT & integrasi Gemini LLM
-│   ├── utils/               # Modul pembantu pencatatan log
-│   ├── main.py              # Titik masuk server FastAPI
-│   ├── requirements.txt     # Dependensi pustaka Python
-│   └── Dockerfile           # Spesifikasi kontainer Docker Python
-├── docs/                    # Berkas dokumentasi arsitektur
-│   ├── assemblyai-integration.md # Spesifikasi integrasi AssemblyAI Realtime
-│   ├── basis-topik.md       # Konsep dasar terapi CBT 3 langkah
-│   ├── gemma-gemini-api-reference.md # Panduan pemanggilan Google GenAI SDK
-│   ├── tech-stack.md        # Dokumen arsitektur dan spesifikasi teknologi
-│   └── socrates-voice-banner.svg # Banner SVG Diagram Arsitektur
-├── .env.example             # Template variabel lingkungan
-├── docker-compose.yml       # Orchestration kontainer sistem
-├── AGENTS.md                # Standar pengembangan software
-├── DESIGN.md                # Spesifikasi sistem desain UI
-└── README.md                # Dokumentasi utama proyek
+├── python-service/          # FastAPI Microservice (CBT Logic & Gemini LLM)
+│   ├── routers/             # FastAPI route controllers
+│   ├── services/            # CBT processing & crisis classification
+│   ├── utils/               # Structured logging utility
+│   ├── schemas.py           # Pydantic data schemas
+│   ├── main.py              # FastAPI application entry
+│   ├── requirements.txt     # Python package requirements
+│   └── Dockerfile           # Python service container definition
+├── docs/                    # Architecture and integration specifications
+├── .env.example             # Environment variables template
+├── docker-compose.yml       # Container orchestration specification
+├── AGENTS.md                # Development standards contract
+└── README.md                # Main project documentation
 ```
 
 ---
 
-## Pengujian Sistem
+## System Verification and Tests
 
-Prosedur verifikasi dapat dijalankan melalui perintah berikut:
+Run verification checks with:
 
 ```bash
-# Pengujian Fastify Backend
+# Backend TypeScript Typecheck & Build
 cd backend
-npm test
+npm run build
 
-# Pengujian Python Microservice
-cd python-service
-pytest
+# Frontend Typecheck & Build
+cd frontend
+npm run build
 ```
 
 ---
 
-## Lisensi dan Kontribusi
+## License and Contribution
 
-Proyek ini didistribusikan di bawah **MIT License**. Informasi lisensi secara lengkap tersedia pada berkas `LICENSE`.
-
-Kontribusi pengembangan perangkat lunak terbuka bagi publik. Pembaruan atau perbaikan dapat disampaikan melalui *Pull Request* atau *Issue* pada repositori ini.
-
-<div align="center">
-  <p>Socrates Voice — Platform Terapi Suara Berbasis Kecerdasan Buatan dan Metodologi CBT.</p>
-</div>
+Distributed under the **MIT License**. See `LICENSE` for details.
