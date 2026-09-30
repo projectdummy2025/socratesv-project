@@ -86,8 +86,8 @@ export async function requestCbtAnalysis(userThought: string, conversationHistor
 
   return {
     currentStep: 'challenge',
-    empathySummary: 'Saya mendengar dan memahami perasaan Anda.',
-    challengeQuestion: `Apakah ada bukti nyata yang mendukung pikiran: '${userThought}'?`,
-    replacementThought: 'Mari kita pertimbangkan situasi ini dari perspektif yang lebih seimbang.'
+    empathySummary: 'I hear and understand how you feel.',
+    challengeQuestion: `Is there concrete evidence supporting the thought: '${userThought}'?`,
+    replacementThought: 'Let us consider this situation from a more balanced perspective.'
   };
 }
