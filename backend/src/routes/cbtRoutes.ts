@@ -34,9 +34,9 @@ export async function cbtRoutes(fastifyInstance: FastifyInstance): Promise<void>
     // Fallback response if Python microservice is offline
     return reply.code(200).send({
       currentStep: 'challenge',
-      empathySummary: `Saya mengerti dan dapat merasakan betapa beratnya situasi ini untuk Anda.`,
-      challengeQuestion: `Apakah ada bukti nyata yang mendukung pikiran: '${requestBody?.userThought || ''}'?`,
-      replacementThought: 'Mari kita pertimbangkan situasi ini dari perspektif yang lebih seimbang.'
+      empathySummary: `I hear how heavy and exhausting this situation feels for you right now.`,
+      challengeQuestion: `When this thought comes up, is there another perspective that might bring you some peace of mind?`,
+      replacementThought: 'You are doing your best, and it is completely okay to take things one gentle step at a time.'
     });
   });
 }
